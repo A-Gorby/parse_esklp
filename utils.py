@@ -1,3 +1,4 @@
+import os
 import sys
 import logging
 import zipfile
@@ -39,7 +40,8 @@ def unzip_esklp(path_esklp_source, fn_esklp_xml_active_zip, work_path):
     logging.info('Unzip ' + fn_esklp_xml_active_zip + ' start...')
 
     try:
-        with zipfile.ZipFile(path_esklp_source + fn_esklp_xml_active_zip, 'r') as zip_ref:
+        # with zipfile.ZipFile(path_esklp_source + fn_esklp_xml_active_zip, 'r') as zip_ref:
+        with zipfile.ZipFile(os.path.join(path_esklp_source, fn_esklp_xml_active_zip), 'r') as zip_ref:
             fn_list = zip_ref.namelist()
             zip_ref.extractall(work_path)
         logging.info('Unzip ' + fn_esklp_xml_active_zip + ' done!')

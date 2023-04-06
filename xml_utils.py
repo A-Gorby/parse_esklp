@@ -5,6 +5,7 @@ from xml_to_dict import XMLtoDict
 
 import numpy as np
 import pandas as pd
+import os, sys
 import math
 from tqdm import tqdm
 tqdm.pandas()
@@ -85,11 +86,13 @@ def load_smnn_list_dict(root, rec_limit = np.inf, n_levels = 8 ):
 def load_smnn(path_esklp_source, fn_schema, work_path, fn_esklp_xml_active, n_rec=np.inf):
 
     logging.info('Loading xml scheme ' + fn_esklp_xml_active + '...')
-    schema = etree.XMLSchema(file = path_esklp_source + fn_schema)
+    # schema = etree.XMLSchema(file = path_esklp_source + fn_schema)
+    schema = etree.XMLSchema(file = os.path.join(path_esklp_source, fn_schema))
     parser = etree.XMLParser(schema = schema)
     # parser = etree.XMLParser(schema=schema, huge_tree=True)
     logging.info('Init parse xml ' + fn_esklp_xml_active + ' start...')
-    tree = etree.parse(work_path + fn_esklp_xml_active, parser=parser)
+    # tree = etree.parse(work_path + fn_esklp_xml_active, parser=parser)
+    tree = etree.parse(os.path.join(work_path,fn_esklp_xml_active), parser=parser)
     root = tree.getroot()
     del tree
     gc.collect()
@@ -383,11 +386,14 @@ def load_klp_list_dict(lst, rec_start=0, rec_end = np.inf):
 def load_klp_list(path_esklp_source, fn_schema, work_path, 
             fn_esklp_xml_active, n_rec=np.inf):
     logging.info('Loading xml scheme ' + fn_esklp_xml_active + '...')
-    schema = etree.XMLSchema(file = path_esklp_source + fn_schema)
+    # schema = etree.XMLSchema(file = path_esklp_source + fn_schema)
+    schema = etree.XMLSchema(file = os.path.join(path_esklp_source, fn_schema))
+    
     parser = etree.XMLParser(schema = schema)
     # parser = etree.XMLParser(schema=schema, huge_tree=True)
     logging.info('Init parse xml ' + fn_esklp_xml_active + ' start...')
-    tree = etree.parse(work_path + fn_esklp_xml_active, parser=parser)
+    # tree = etree.parse(work_path + fn_esklp_xml_active, parser=parser)
+    tree = etree.parse(os.path.join(work_path, fn_esklp_xml_active), parser=parser)
     root = tree.getroot()
     del tree
     gc.collect()

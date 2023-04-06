@@ -1,0 +1,1141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ESKLP  data types, version 21.5, create date 17.08.2020 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://service.rosminzdrav.ru/ESKLP" xmlns:xsd="undefined" targetNamespace="http://service.rosminzdrav.ru/ESKLP">
+	<xs:element name="ESKLP">
+		<xs:annotation>
+			<xs:documentation>Единый справочник-каталог лекарственных препаратов</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="group_list"/>
+			</xs:sequence>
+			<xs:attribute name="UUID" type="uuidType" use="required">
+				<xs:annotation>
+					<xs:documentation>Уникальный идентификатор выгрузки</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="date_create" type="xs:dateTime" use="required">
+				<xs:annotation>
+					<xs:documentation>Дата-время создания выгрузки</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="schemaVersion" type="SmallNameType" use="optional">
+				<xs:annotation>
+					<xs:documentation>Номер версии схемы, которой соответствуют данные</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="contentType" type="SmallNameType">
+				<xs:annotation>
+					<xs:documentation>Тип выгрузки (full – полная выгрузка ЕСКЛП, fullActive – полная выгрузка ЕСКЛП по активным записям (без деактивированных), increment – частичная (инкрементальная) выгрузка)</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="fullEsklpUUID" type="uuidType" use="optional">
+				<xs:annotation>
+					<xs:documentation>Ссылка на полную выгрузку, по отношению к которой составлена инкрементальная выгрузка</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="prevIncrementUUID" type="uuidType" use="optional">
+				<xs:annotation>
+					<xs:documentation>Ссылка на предыдущую инкрементальную выгрузку</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="partNumber" type="xs:int" use="optional">
+				<xs:annotation>
+					<xs:documentation>Номер части выгрузки</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="partQuantity" type="xs:int" use="optional">
+				<xs:annotation>
+					<xs:documentation>Общее количество частей выгрузки</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="group">
+		<xs:annotation>
+			<xs:documentation>Группа узлов СМНН</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="date_change"/>
+				<xs:element ref="smnn_list" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Список узлов СМНН данной группы</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="group_list" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Cписок дочерних групп узлов СМНН данной группы</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="name" type="BigNameType" use="required">
+				<xs:annotation>
+					<xs:documentation>Название группы узлов СМНН, выводимое пользователям</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="UUID" type="uuidType" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="group_list">
+		<xs:annotation>
+			<xs:documentation>Список групп узлов СМНН</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="group" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="smnn_list">
+		<xs:annotation>
+			<xs:documentation>Список узлов СМНН</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="smnn" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="smnn">
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation>Узел СМНН. Содержит информацию, используемую при описании Заказчиком объекта закупки. Основан на триаде "МНН + Лекарственная форма + Дозировка"</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element ref="okpd2"/>
+				<xs:element ref="code">
+					<xs:annotation>
+						<xs:documentation>Код узла СМНН</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="mnn">
+					<xs:annotation>
+						<xs:documentation>Наименование МНН на русском языке  (стандартизованное значение)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="grls_mnn" minOccurs="0"/>
+				<xs:element ref="form">
+					<xs:annotation>
+						<xs:documentation>Название лекарственной формы  (стандартизованное значение)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="grls_lf_list" minOccurs="0"/>
+				<xs:element ref="dosage"/>
+				<xs:element ref="ftg"/>
+				<xs:element ref="ath" maxOccurs="unbounded"/>
+				<xs:element ref="is_znvlp">
+					<xs:annotation>
+						<xs:documentation>Признак принадлежности препаратов, принадлежащих данному узлу классификатора реестру ЖНВЛП</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="is_narcotic"/>
+				<xs:element ref="date_create"/>
+				<xs:element ref="date_start"/>
+				<xs:element ref="date_end" minOccurs="0"/>
+				<xs:element ref="date_change"/>
+				<xs:element ref="smnn_replace_list" minOccurs="0"/>
+				<xs:element ref="smnn_descendant" minOccurs="0"/>
+				<xs:element ref="smnn_price_list" minOccurs="0"/>
+				<xs:element ref="klp_list"/>
+				<xs:element ref="invalidation_data_list" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="hash" type="hashType" use="required">
+				<xs:annotation>
+					<xs:documentation>Контрольная сумма версии записи СМНН</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="UUID" type="uuidType" use="required">
+				<xs:annotation>
+					<xs:documentation>Уникальный системный идентификатор записи СМНН</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="okpd2">
+		<xs:annotation>
+			<xs:documentation>Код ОКПД2</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="\d{2}\.\d{2}\.\d{2}\.\d{3}"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="code">
+		<xs:annotation>
+			<xs:documentation>Код каталога</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="codeType"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="mnn" type="HugeNameType">
+		<xs:annotation>
+			<xs:documentation>Наименование МНН на русском языке</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="grls_mnn">
+		<xs:annotation>
+			<xs:documentation>Список нормализованных (исходных) МНН для узла СМНН</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="mnn_name" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="mnn_name" type="HugeNameType">
+		<xs:annotation>
+			<xs:documentation>Наименование МНН на русском языке из ГРЛС</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="form" type="BigNameType">
+		<xs:annotation>
+			<xs:documentation>Название лекарственной формы</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="grls_lf_list">
+		<xs:annotation>
+			<xs:documentation>Список нормализованных (исходных) лекарственных форм для узла СМНН</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="grls_lf" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Нормализованные лекарственные формы для узла СМНН</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="grls_lf">
+		<xs:annotation>
+			<xs:documentation>Ненормализованные лекарственные формы для узла СМНН</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="dosage_name" maxOccurs="1"/>
+				<xs:element ref="lf_name" maxOccurs="1"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="dosage_name" type="HugeNameType">
+		<xs:annotation>
+			<xs:documentation>Полное текстовое описание дозировки из ГРЛС</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="lf_name" type="HugeNameType">
+		<xs:annotation>
+			<xs:documentation>Название лекарственной формы из ГРЛС</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="dosage">
+		<xs:annotation>
+			<xs:documentation>Описание дозировки</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="grls_value" type="BigNameType" form="qualified">
+					<xs:annotation>
+						<xs:documentation>Полное текстовое описание дозировки из ГРЛС</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="dosage_unit" form="qualified">
+					<xs:annotation>
+						<xs:documentation>Единица измерения дозировки лекарственного препарата</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="name">
+								<xs:annotation>
+									<xs:documentation>Название единицы измерения дозировки лекарственного препарата</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="okei_code" form="qualified">
+								<xs:annotation>
+									<xs:documentation>Код ОКЕИ. При наличии данных в ЕСКЛП передается реальное значение. При отсутствии данных, а также для комбинированных препаратов  передается 876</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:pattern value="\d{3,4}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="okei_name" type="BigNameType" form="qualified">
+								<xs:annotation>
+									<xs:documentation>Название единицы ОКЕИ. При наличии данных в ЕСКЛП передается реальное значение. При отсутствии данных, а также для комбинированных препаратов  передается "Условная единица"</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="dosage_num" form="qualified">
+					<xs:annotation>
+						<xs:documentation>Количество единиц измерения лекарственного препарата (единиц действующего вещества) в единице лекарственной формы</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:decimal">
+							<xs:minExclusive value="0"/>
+							<xs:totalDigits value="20"/>
+							<xs:fractionDigits value="10"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="dosage_user" form="qualified">
+					<xs:annotation>
+						<xs:documentation>Потребительская единица лекарственного препарата (единица товара)</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="name">
+								<xs:annotation>
+									<xs:documentation>Название потребительской единицы ЛП</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="okei_code" form="qualified">
+								<xs:annotation>
+									<xs:documentation>Код ОКЕИ. При отсутствии возможности сопоставить значение с ОКЕИ передается 876</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:pattern value="\d{3,4}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="okei_name" type="BigNameType" form="qualified">
+								<xs:annotation>
+									<xs:documentation>Название единицы ОКЕИ. При отсутствии возможности сопоставить значение с ОКЕИ передается "Условная единица"</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="price_value">
+		<xs:annotation>
+			<xs:documentation>Предельная отпускная цена единицы</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:decimal">
+				<xs:fractionDigits value="10"/>
+				<xs:totalDigits value="20"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="value">
+		<xs:annotation>
+			<xs:documentation>Референтная цена потребительской единицы</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:decimal">
+				<xs:fractionDigits value="10"/>
+				<xs:totalDigits value="20"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="sigma">
+		<xs:annotation>
+			<xs:documentation>Стандартное отклонение для ценовой подвыборки</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:decimal">
+				<xs:fractionDigits value="10"/>
+				<xs:totalDigits value="20"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="ftg" type="BigNameType">
+		<xs:annotation>
+			<xs:documentation>Название ФТГ</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="ath">
+		<xs:annotation>
+			<xs:documentation>Элемент справочника анатомо-терапевтически-химической классификации (АТХ)</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ath_name" type="BigNameType" form="qualified">
+					<xs:annotation>
+						<xs:documentation>Название АТХ на русском</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ath_code" type="SmallNameType" form="qualified">
+					<xs:annotation>
+						<xs:documentation>Код АТХ</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="is_znvlp" type="xs:boolean">
+		<xs:annotation>
+			<xs:documentation>Признак принадлежности всех препаратов, принадлежащих данному узлу классификатора реестру ЖНВЛП</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="is_narcotic" type="xs:boolean">
+		<xs:annotation>
+			<xs:documentation>Наличие в лекарственном препарате наркотических средств, психотропных веществ и их прекурсоров, подлежащих контролю в Российской Федерации в соответствии с законодательством Российской Федерации, международными договорами Российской Федерации, в том числе Единой конвенцией о наркотических средствах 1961 года и Конвенцией о психотропных веществах 1971 года</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="date_create" type="xs:dateTime">
+		<xs:annotation>
+			<xs:documentation>Дата создания записи</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="date_start" type="xs:dateTime">
+		<xs:annotation>
+			<xs:documentation>Дата начала действия записи</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="date_end" type="xs:dateTime">
+		<xs:annotation>
+			<xs:documentation>Дата окончания действия записи</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="date_change" type="xs:dateTime">
+		<xs:annotation>
+			<xs:documentation>Дата последнего изменения записи</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="smnn_price_list">
+		<xs:annotation>
+			<xs:documentation>Референтные цены на узел СМНН</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="smnn_price" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="smnn_price">
+		<xs:annotation>
+			<xs:documentation>Референтная цена на узел СМНН</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="value">
+					<xs:annotation>
+						<xs:documentation>Значение референтной цены (рублей) за потребительскую единицу (dosage_user) лекарственного препарата соответствующего узла СМНН</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="sigma"/>
+				<xs:element ref="usage_min" minOccurs="0"/>
+				<xs:element ref="usage_max" minOccurs="0"/>
+				<xs:element ref="price_type"/>
+				<xs:element ref="date_create"/>
+				<xs:element ref="date_start"/>
+				<xs:element ref="date_end" minOccurs="0"/>
+				<xs:element ref="author"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="usage_min">
+		<xs:annotation>
+			<xs:documentation>Минимальное количество закупаемых потребительских единиц ЛП, для которых применима данная цена</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:decimal">
+				<xs:totalDigits value="30"/>
+				<xs:fractionDigits value="10"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="usage_max">
+		<xs:annotation>
+			<xs:documentation>Максимальное количество закупаемых потребительских единиц ЛП, для которых применима данная цена</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:decimal">
+				<xs:totalDigits value="30"/>
+				<xs:fractionDigits value="10"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="price_type">
+		<xs:annotation>
+			<xs:documentation>Тип цены:
+1 - средневзвешенная цена по России после 01.01.2019
+2 - (не применяется) рассчитана по Методике с использованием исторических данных и последующей ручной корректировкой
+3 - (не применяется) задана путем проведения переговоров
+4 - референтная цена, рассчитаная по Методике с использованием исторических данных и сведений о взаимозаменяемости после 01.01.2019</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:int">
+				<xs:enumeration value="1"/>
+				<xs:enumeration value="2"/>
+				<xs:enumeration value="3"/>
+				<xs:enumeration value="4"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="author">
+		<xs:annotation>
+			<xs:documentation>СНИЛС оператора, внесшего данную запись или 000-000-000 00 в случае автоматического расчета</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="\d{3}-\d{3}-\d{3} \d{2}"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="klp_list">
+		<xs:annotation>
+			<xs:documentation>Список позиций КЛП</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="klp" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Позиция КЛП. Элемент содержит значения специфичных полей товарной позиции.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="klp">
+		<xs:annotation>
+			<xs:documentation>Позиция КЛП. Элемент содержит значения специфичных полей товарной позиции.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="code">
+					<xs:annotation>
+						<xs:documentation>Код каталога для позиции КЛП</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="mnn_norm_name">
+					<xs:annotation>
+						<xs:documentation>Нормализованное описание (исходное) МНН</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="dosage_norm_name" type="HugeNameType">
+					<xs:annotation>
+						<xs:documentation>Нормализованное описание (исходное) дозировки</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="lf_norm_name" type="HugeNameType">
+					<xs:annotation>
+						<xs:documentation>Нормализованное название (исходное) лекарственной формы</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="is_dosed"/>
+				<xs:element ref="is_znvlp">
+					<xs:annotation>
+						<xs:documentation>Признак принадлежности ЛП реестру ЖНВЛП</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="is_narcotic"/>
+				<xs:element ref="trade_name"/>
+				<xs:element ref="pack_1"/>
+				<xs:element ref="pack_2"/>
+				<xs:element name="mass_volume" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Масса/объем в первичной упаковке</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="num">
+								<xs:annotation>
+									<xs:documentation>Количество массы/объема в первичной упаковке</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:decimal">
+										<xs:totalDigits value="11"/>
+										<xs:fractionDigits value="10"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="name" type="BigNameType">
+								<xs:annotation>
+									<xs:documentation>Единица измерения массы/объема в первичной упаковке</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="consumer_total">
+					<xs:annotation>
+						<xs:documentation>Количество потребительских единиц в потребительской упаковке</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:decimal">
+							<xs:totalDigits value="18"/>
+							<xs:fractionDigits value="3"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element ref="completeness" minOccurs="0"/>
+				<xs:element ref="owner"/>
+				<xs:element ref="num_reg"/>
+				<xs:element ref="date_reg"/>
+				<xs:element ref="manufacturer"/>
+				<xs:element ref="date_create"/>
+				<xs:element ref="date_start"/>
+				<xs:element ref="date_end" minOccurs="0"/>
+				<xs:element name="date_reg_end" type="xs:date" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Дата окончания срока действия регистрационного удостоверения</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="reason_end" minOccurs="0"/>
+				<xs:element ref="date_change"/>
+				<xs:element ref="klp_replace_list" minOccurs="0"/>
+				<xs:element ref="klp_descendant_list" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Список КЛП потомков данной записи</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="klp_lim_price_list" minOccurs="0"/>
+				<xs:element ref="invalidation_data_list" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="hash" type="hashType" use="required">
+				<xs:annotation>
+					<xs:documentation>Контрольная сумма версии записи КЛП</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="UUID" type="uuidType" use="required">
+				<xs:annotation>
+					<xs:documentation>Уникальный системный идентификатор записи КЛП</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="trade_name" type="BigNameType">
+		<xs:annotation>
+			<xs:documentation>Торговое наименование</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="pack_1">
+		<xs:annotation>
+			<xs:documentation>Первичная упаковка</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="num" form="qualified">
+					<xs:annotation>
+						<xs:documentation>Количество лекарственной формы в первичной упаковке</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:decimal">
+							<xs:totalDigits value="11"/>
+							<xs:fractionDigits value="10"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="name" type="BigNameType" form="qualified">
+					<xs:annotation>
+						<xs:documentation>Название первичной упаковки</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="pack_2">
+		<xs:annotation>
+			<xs:documentation>Потребительская упаковка</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="num" form="qualified">
+					<xs:annotation>
+						<xs:documentation>Количество первичных упаковок в потребительской упаковке</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:int">
+							<xs:totalDigits value="11"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="name" type="BigNameType" form="qualified" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Название потребительской упаковки</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="completeness" type="BigNameType">
+		<xs:annotation>
+			<xs:documentation>Комплектность упаковки</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="owner">
+		<xs:annotation>
+			<xs:documentation>ЮЛ владельца  регистрационного удостоверения лекарственного препарата</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="name">
+					<xs:annotation>
+						<xs:documentation>Название владельца регистрационного удостоверения лекарственного препарата</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="country_code" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Код страны ОКСМ</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="country_name">
+					<xs:annotation>
+						<xs:documentation>Страна</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="reg_num" type="SmallNameType">
+		<xs:annotation>
+			<xs:documentation>Номер решения о регистрации предельной отпускной цены</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="name" type="BigNameType"/>
+	<xs:element name="address" type="BigNameType"/>
+	<xs:element name="manufacturer">
+		<xs:annotation>
+			<xs:documentation>Производитель ЛП</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="name">
+					<xs:annotation>
+						<xs:documentation>Полное наименование производителя</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="country_code" minOccurs="0"/>
+				<xs:element ref="country_name">
+					<xs:annotation>
+						<xs:documentation>Страна</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="address">
+					<xs:annotation>
+						<xs:documentation>Адрес производителя</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="klp_lim_price_list">
+		<xs:annotation>
+			<xs:documentation>Список предельных отпускных цен на позицию КЛП</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="klp_lim_price" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="klp_lim_price">
+		<xs:annotation>
+			<xs:documentation>Предельная отпускная цена на позицию КЛП</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="price_value">
+					<xs:annotation>
+						<xs:documentation>Значение предельной отпускной цены (рублей)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="reg_date">
+					<xs:annotation>
+						<xs:documentation>Дата регистрации предельной отпускной цены</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="reg_num"/>
+				<xs:element ref="date_end" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Дата окончания действия позоции ПОЦ</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="reason_end" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Причина окончания действия позиции ПОЦ</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="date_deactivate" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Дата исключения цены из реестра предельных отпускных цен по решению МЗ РФ</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="barcode"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="reason_end" type="BigNameType">
+		<xs:annotation>
+			<xs:documentation>Причина окончания действия записи</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="reg_date" type="xs:date">
+		<xs:annotation>
+			<xs:documentation>Дата регистрации предельной отпускной цены</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="num_reg" type="SmallNameType">
+		<xs:annotation>
+			<xs:documentation>Номер регистрационного удостоверения лекарственного препарата</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="invalidation_data_list">
+		<xs:annotation>
+			<xs:documentation>Список сведений о качестве данных, результате валидации и возможности применения данных</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="invalidation_data" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="invalidation_data">
+		<xs:annotation>
+			<xs:documentation>Сведения о качестве данных, результате валидации и возможности применения данных</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="code" type="xs:integer">
+					<xs:annotation>
+						<xs:documentation>Код результата проверки данных</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="date" type="xs:date" minOccurs="1">
+					<xs:annotation>
+						<xs:documentation>Дата проверки данных и установления признака</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="description" type="BigNameType">
+					<xs:annotation>
+						<xs:documentation>Описание результата проверки данных</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="date_deactivate" type="xs:date">
+		<xs:annotation>
+			<xs:documentation>Дата исключения цены из реестра предельных отпускных цен</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="barcode">
+		<xs:annotation>
+			<xs:documentation>Товарный номер</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="\d{8,14}"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="date_reg" type="xs:date">
+		<xs:annotation>
+			<xs:documentation>Дата получения регистрационного удостоверения лекарственного препарата</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="country_name" type="BigNameType">
+		<xs:annotation>
+			<xs:documentation>Название страны</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="country_code">
+		<xs:annotation>
+			<xs:documentation>Код страны ОКСМ (3 цифры)</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="\d{3}"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:simpleType name="codeType">
+		<xs:annotation>
+			<xs:documentation>Текстовое поле кода каталога</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d{2}\.\d{2}\.\d{2}\.\d{3}-\d{6}-\d-\d{5}-\d{13}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="convType">
+		<xs:annotation>
+			<xs:documentation>Текстовое поле кода свертки</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-zA-Z]{4}\d{3}[a-zA-Z]{2}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="uuidType">
+		<xs:annotation>
+			<xs:documentation>Уникальный идентификатор</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="hashType">
+		<xs:annotation>
+			<xs:documentation>Хэш-сумма</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-F0-9]{32}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="HugeNameType">
+		<xs:annotation>
+			<xs:documentation>Текстовое поле размерности до 2000 символов</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="2000"/>
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="BigNameType">
+		<xs:annotation>
+			<xs:documentation>Большое текстовое поле</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="500"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SmallNameType">
+		<xs:annotation>
+			<xs:documentation>Малое текстовое поле</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="50"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="smnn_replace_list">
+		<xs:annotation>
+			<xs:documentation>Список СМНН, на основе которых была создана данная запись</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="smnn_ancestor" type="uuidType" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Уникальный системный идентификатор записи СМНН</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="smnn_descendant" type="uuidType">
+		<xs:annotation>
+			<xs:documentation>Ссылка на элемент-потомок (узел СМНН), который унаследовал информацию от текущего элемента</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="klp_replace_list">
+		<xs:annotation>
+			<xs:documentation>Список КЛП, на основе которых была создана данная запись</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="klp_ancestor" type="uuidType" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Уникальный системный идентификатор записи КЛП</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="klp_descendant" type="uuidType">
+		<xs:annotation>
+			<xs:documentation>Ссылка на элемент-потомок (позиция КЛП), который унаследовал информацию от текущего элемента</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!--Квитанция приема записей справочника. Типы-->
+	<xs:element name="confirmation">
+		<xs:annotation>
+			<xs:documentation>Квитанция приема записей справочника</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="header">
+					<xs:annotation>
+						<xs:documentation>Заголовок квитанции</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="batchItemCount" type="xs:int">
+								<xs:annotation>
+									<xs:documentation>Количесво обработанных записей справочника</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="body">
+					<xs:annotation>
+						<xs:documentation>Данные квитанции</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="fileName" type="BigNameType">
+								<xs:annotation>
+									<xs:documentation>Имя обработанного файла (пакета записей справочника)</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element ref="result"/>
+							<xs:element name="positionResults" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Результат обработки позиций файла (пакета записей справочника)</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="positionResult" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Результат обработки позиции (записи справочника)</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element ref="result">
+														<xs:annotation>
+															<xs:documentation>Результат обработки позиции (записи справочника)</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="violations" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Выявленные в процессе обработки позиции (записи справочника) ошибки (предупреждения)</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element ref="violation" maxOccurs="unbounded"/>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+												<xs:attribute name="positionHash" type="hashType" use="required">
+													<xs:annotation>
+														<xs:documentation>Контрольная сумма обработанной позиции (записи справочника)</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
+												<xs:attribute name="positionUUID" type="uuidType" use="required">
+													<xs:annotation>
+														<xs:documentation>Уникальный системный идентификатор обработанной позиции (записи справочника)</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="violations" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Выявленные в процессе обработки файла (записей справочника) нарушения и ошибки пакета</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="violation"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="UUID" type="uuidType" use="required">
+				<xs:annotation>
+					<xs:documentation>Уникальный идентификатор квитанции</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="parentUUID" type="uuidType" use="required">
+				<xs:annotation>
+					<xs:documentation>Уникальный идентификатор принятого пакета данных, на который формируется квитанция</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="date_create" type="xs:dateTime" use="required">
+				<xs:annotation>
+					<xs:documentation>Дата-время создания квитанции</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="violation">
+		<xs:annotation>
+			<xs:documentation>Ошибка (предупреждение)</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="violationCode"/>
+				<xs:element ref="violationLevel"/>
+				<xs:element name="name" type="BigNameType">
+					<xs:annotation>
+						<xs:documentation>Название</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="description" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Описание</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="2000"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="violationLevel">
+		<xs:annotation>
+			<xs:documentation>Уровень ошибки (предупреждения):
+
+error - ошибка;
+warning - предупреждение.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="error"/>
+				<xs:enumeration value="warning"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="violationCode">
+		<xs:annotation>
+			<xs:documentation>Код ошибки (предупреждения)</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:minLength value="1"/>
+				<xs:maxLength value="10"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="result">
+		<xs:annotation>
+			<xs:documentation>Результат обработки файла (пакета записей справочника)</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="success"/>
+				<xs:enumeration value="failure"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="klp_descendant_list">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="klp_descendant" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="normalizeDosage" type="BigNameType">
+		<xs:annotation>
+			<xs:documentation>Нормализованное описание (исходное) дозировки</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="is_dosed" type="xs:boolean">
+		<xs:annotation>
+			<xs:documentation>Признак дозированного ЛП</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="mnn_norm_name" type="HugeNameType">
+		<xs:annotation>
+			<xs:documentation>Нормализованное наименование (исходное) МНН на русском языке</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+</xs:schema>

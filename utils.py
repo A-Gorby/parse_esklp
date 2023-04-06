@@ -1,15 +1,18 @@
 import os
 import sys
+import glob
 import logging
 import zipfile
 import datetime
+import pandas as pd
 
 
 def find_last_fn_pickle(prefix, path_files):
     fn_pickle = None
     if prefix is None: prefix =''
     # fn_list = sorted(glob.glob(os.path.join(path_files, prefix) + '*.pickle'))
-    fn_list = sorted(glob.glob(path_files + prefix + '*.pickle'))
+    # fn_list = sorted(glob.glob(path_files + prefix + '*.pickle'))
+    fn_list = sorted(glob.glob(os.path.join(path_files, prefix + '*.pickle')))
     # print(fn_list)
     if len(fn_list)>0:  fn_pickle = fn_list[-1]
     return fn_pickle
@@ -54,7 +57,8 @@ def unzip_file(path_source, fn_zip, work_path):
     logging.info('Unzip ' + fn_zip + ' start...')
 
     try:
-        with zipfile.ZipFile(path_source + fn_zip, 'r') as zip_ref:
+        # with zipfile.ZipFile(path_source + fn_zip, 'r') as zip_ref:
+        with zipfile.ZipFile(os.path.join(path_source, fn_zip), 'r') as zip_ref:
             fn_list = zip_ref.namelist()
             zip_ref.extractall(work_path)
         logging.info('Unzip ' + fn_zip + ' done!')
@@ -68,6 +72,7 @@ def save_df_to_pickle(df, path_to_save, fn_main):
     dt = datetime.datetime.now(offset)
     str_date = dt.strftime("%Y_%m_%d_%H%M")
     fn = fn_main + '_' + str_date + '.pickle'
-    df.to_pickle(path_to_save + fn)
+    # df.to_pickle(path_to_save + fn)
+    df.to_pickle(os.path.join(path_to_save, fn))
     logging.info(fn + ' saved to ' + path_to_save)
     return fn

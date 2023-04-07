@@ -799,6 +799,6 @@ def reformat_klp_list_dict_df(klp_list_dict, klp_list_dict_df, smnn_list_df, dat
     logger.info("Extend klp: + 'dosage_name_standard_list' , 'dosage_standard_value' - end")
     logger.info("Reformat klp - done!:"  + str(klp_list_dict_df.shape))
 
-    return klp_list_dict_df
+    return klp_list_dict_df, f_s_list_to_add
 
     

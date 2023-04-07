@@ -81,4 +81,4 @@ def parse_esklp (
     fn_klp_list_dict_df_pickle_main = klp_prefix + fn_esklp_xml.split('_')[1]
     fn_klp_list_dict_df_pickle = save_df_to_pickle(klp_list_dict_df, 
          path_esklp_processed, fn_klp_list_dict_df_pickle_main)
-    return fn_klp_list_dict_df, fn_smnn_list_df, f_s_list_to_add
+    return fn_smnn_list_pickle, fn_klp_list_dict_df_pickle, f_s_list_to_add

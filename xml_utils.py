@@ -15,6 +15,12 @@ import warnings
 warnings.filterwarnings("ignore")
 import pickle
 
+from utils_io import logger
+if len(logger.handlers) > 1:
+    for handler in logger.handlers:
+        logger.removeHandler(handler)
+    from utils_io import logger
+
 ns = {"ns2":"http://service.rosminzdrav.ru/ESKLP"}
 
 #def etree_to_dict_03(group: _Element)->dict:
@@ -85,31 +91,31 @@ def load_smnn_list_dict(root, rec_limit = np.inf, n_levels = 8 ):
 
 def load_smnn(path_esklp_source, fn_schema, work_path, fn_esklp_xml_active, n_rec=np.inf):
 
-    logging.info('Loading xml scheme ' + fn_esklp_xml_active + '...')
+    logger.info('Loading xml scheme ' + fn_esklp_xml_active + '...')
     # schema = etree.XMLSchema(file = path_esklp_source + fn_schema)
     schema = etree.XMLSchema(file = os.path.join(path_esklp_source, fn_schema))
     parser = etree.XMLParser(schema = schema)
     # parser = etree.XMLParser(schema=schema, huge_tree=True)
-    logging.info('Init parse xml ' + fn_esklp_xml_active + ' start...')
+    logger.info('Init parse xml ' + fn_esklp_xml_active + ' start...')
     # tree = etree.parse(work_path + fn_esklp_xml_active, parser=parser)
     tree = etree.parse(os.path.join(work_path,fn_esklp_xml_active), parser=parser)
     root = tree.getroot()
     del tree
     gc.collect()
     
-    logging.info('Init parse xml ' + fn_esklp_xml_active + ' done!')
+    logger.info('Init parse xml ' + fn_esklp_xml_active + ' done!')
 
-    logging.info('Extract smnn:  start...')
+    logger.info('Extract smnn:  start...')
     #smnn_list = load_smnn_list_dict(root)
     smnn_list = load_smnn_list_dict(root, rec_limit = n_rec)
     #smnn_list = []
-    logging.info('Extract smnn: done!')
-    logging.info(f"Итого: {len(smnn_list)} записей") # в официальной выгрузке в Excel 7237 18/08/2022 7253 07/09/2022
+    logger.info('Extract smnn: done!')
+    logger.info(f"Итого: {len(smnn_list)} записей") # в официальной выгрузке в Excel 7237 18/08/2022 7253 07/09/2022
     gc.collect(); gc.collect()
     return  smnn_list 
 
 def create_smnn_list_df(smnn_list):
-    logging.info('Transformation smnn_list to pandas DataFrame')
+    logger.info('Transformation smnn_list to pandas DataFrame')
     smnn_list_df = pd.DataFrame(smnn_list)
     return smnn_list_df
 
@@ -209,7 +215,7 @@ def get_reccursive_values( d: dict, debug = False): # -> list, elem of list:
     return lst
 
 def reformat_smnn_list_df(smnn_list, smnn_list_df):
-    logging.info('Reformation smnn_list_df')
+    logger.info('Reformation smnn_list_df')
     cols_to_reformat_01 = ['grls_mnn', 'form', 'grls_lf_list', 'dosage', 'ftg', ] # 'ath',
     cols_to_reformat_name = []
     for c in cols_to_reformat_01:
@@ -256,14 +262,14 @@ def reformat_smnn_list_df(smnn_list, smnn_list_df):
         
         new_cols2 = [cols_map_to_reformat_name[c] for c in new_cols]
         #logging.info("col:" + col + "--> [" + ', '.join(new_cols) + ']\n--> [' + ', '.join(new_cols2) + ']')
-        logging.info('col ' + col + ' transform --> [' + ', '.join(new_cols2) + ']')
+        logger.info('col ' + col + ' transform --> [' + ', '.join(new_cols2) + ']')
         smnn_list_df[new_cols2] = smnn_list_df[col].progress_apply(lambda x: pd.Series(get_reccursive_values(x)))
         gc.collect(); gc.collect()
         
     for col in cols_to_rename:
     
         new_col = cols_map_to_reformat_name[col]
-        logging.info('col ' + col + ' rename --> ' + new_col)
+        logger.info('col ' + col + ' rename --> ' + new_col)
         # print(f"col: {col} -> {new_col}")
         #smnn_list_df.rename(f"{col}": f"{new_col}", inplace=True)
         smnn_list_df.rename(columns ={ col: new_col}, inplace=True)
@@ -385,26 +391,26 @@ def load_klp_list_dict(lst, rec_start=0, rec_end = np.inf):
                 # fn_esklp_xml_active) #, n_rec=100)
 def load_klp_list(path_esklp_source, fn_schema, work_path, 
             fn_esklp_xml_active, n_rec=np.inf):
-    logging.info('Loading xml scheme ' + fn_esklp_xml_active + '...')
+    logger.info('Loading xml scheme ' + fn_esklp_xml_active + '...')
     # schema = etree.XMLSchema(file = path_esklp_source + fn_schema)
     schema = etree.XMLSchema(file = os.path.join(path_esklp_source, fn_schema))
     
     parser = etree.XMLParser(schema = schema)
     # parser = etree.XMLParser(schema=schema, huge_tree=True)
-    logging.info('Init parse xml ' + fn_esklp_xml_active + ' start...')
+    logger.info('Init parse xml ' + fn_esklp_xml_active + ' start...')
     # tree = etree.parse(work_path + fn_esklp_xml_active, parser=parser)
     tree = etree.parse(os.path.join(work_path, fn_esklp_xml_active), parser=parser)
     root = tree.getroot()
     del tree
     gc.collect()
-    logging.info('Init parse xml ' + fn_esklp_xml_active + ' done!')
+    logger.info('Init parse xml ' + fn_esklp_xml_active + ' done!')
 
-    logging.info('Extract klp:  start...')
+    logger.info('Extract klp:  start...')
     #smnn_list = load_smnn_list_dict(root)
     klp_lst = get_klp_lst(root)
     klp_list_dict = load_klp_list_dict(klp_lst, rec_start=0, rec_end = n_rec)
-    logging.info('Extract klp: done!')
-    logging.info(f"Итого: {len(klp_list_dict)} записей") 
+    logger.info('Extract klp: done!')
+    logger.info(f"Итого: {len(klp_list_dict)} записей") 
     gc.collect()
     return  klp_list_dict 
 
@@ -604,14 +610,16 @@ def klp_lim_price_list_extract(c):
     price_value, reg_date, reg_num, barcode, date_deactivate = lst_return
     return price_value, reg_date, reg_num, barcode, date_deactivate
 
-def load_form_standard_unify_dict():
+def load_form_standard_unify_dict(data_esklp_supp_dicts_dir):
     fn_dict = "form_standard_unify_dict.pickle"
-    path_supp_dicts = 'D:/DPP/01_parsing/data/supp_dicts/'
-    with open(path_supp_dicts + fn_dict, 'rb') as f:
+    # path_supp_dicts = 'D:/DPP/01_parsing/data/supp_dicts/'
+    path_supp_dicts = data_esklp_supp_dicts_dir
+    # with open(path_supp_dicts + fn_dict, 'rb') as f:
+    with open(os.path.join(path_supp_dicts, fn_dict), 'rb') as f:
         form_standard_unify_dict = pickle.load(f)
     return form_standard_unify_dict
 
-def reformat_klp_list_dict_df(klp_list_dict, klp_list_dict_df, smnn_list_df):
+def reformat_klp_list_dict_df(klp_list_dict, klp_list_dict_df, smnn_list_df, data_esklp_supp_dicts_dir):
     
     reformatted_cols = ['klp_lim_price_list_klp_lim_price_reg_num', 'klp_lim_price_list_klp_lim_price_reg_date', 'klp_lim_price_list_klp_lim_price_price_value', 
     'klp_lim_price_list_klp_lim_price_barcode', 'klp_lim_price_list_klp_lim_price_date_deactivate']
@@ -675,7 +683,7 @@ def reformat_klp_list_dict_df(klp_list_dict, klp_list_dict_df, smnn_list_df):
             klp_new_cols = ['lim_price_value', 'lim_price_reg_date',  'lim_price_reg_num', 'lim_price_barcode', 'lim_price_date_deactivate']
             klp_exist_cols = ['price_value', 'reg_date', 'reg_num', 'barcode', 'date_deactivate']
             new_cols2 = ['lim_price_value', 'lim_price_reg_date',  'lim_price_reg_num', 'lim_price_barcode', 'lim_price_date_deactivate']
-            logging.info("col '" + col + "' transform --> [" + ', '.join(new_cols2) + ']')
+            logger.info("col '" + col + "' transform --> [" + ', '.join(new_cols2) + ']')
             klp_list_dict_df[new_cols2] = None
             mask_w = klp_list_dict_df[col].notnull()
             klp_list_dict_df.loc[mask_w, klp_new_cols] = klp_list_dict_df.loc[mask_w, 'klp_lim_price_list'].\
@@ -698,26 +706,26 @@ def reformat_klp_list_dict_df(klp_list_dict, klp_list_dict_df, smnn_list_df):
                 #     print(i, err)
                 
         else:
-            logging.info("col '" + col + "' transform --> [" + ', '.join(new_cols2) + ']')
+            logger.info("col '" + col + "' transform --> [" + ', '.join(new_cols2) + ']')
             klp_list_dict_df[new_cols2] = klp_list_dict_df[col].progress_apply(lambda x: pd.Series(get_reccursive_values(x)))
         gc.collect(); gc.collect()
 
     for col in cols_to_rename_klp:
     
         new_col = cols_map_to_reformat_name_klp[col]
-        logging.info("Rename col '" + col + "' --> '" + new_col + "'")
+        logger.info("Rename col '" + col + "' --> '" + new_col + "'")
         # print(f"col: {col} -> {new_col}")
         klp_list_dict_df.rename(columns = {col: new_col}, inplace=True)
 
-    logging.info("Extend form_standard_unify: main start...")
-    form_standard_unify_dict = load_form_standard_unify_dict()
+    logger.info("Extend form_standard_unify: main start...")
+    form_standard_unify_dict = load_form_standard_unify_dict(data_esklp_supp_dicts_dir)
     form_standard_unify_dict_reverse = {vv: k for k,v in form_standard_unify_dict.items() for vv in v}
     
     f_s_u_d = form_standard_unify_dict_reverse.keys()
     f_s_u_k = klp_list_dict_df['form_standard'].unique()
     f_s_list_to_add = list(set(f_s_u_k).difference(set(f_s_u_d)))
     if len(f_s_list_to_add)> 0: 
-        logging.info(f"Need to extend form_standard_unify by new_values KLP:\n" + '\n'.join(f_s_list_to_add))
+        logger.info(f"Need to extend form_standard_unify by new_values KLP:\n" + '\n'.join(f_s_list_to_add))
 
     klp_list_dict_df['form_standard_unify'] = klp_list_dict_df['form_standard'].\
         progress_apply(lambda x: form_standard_unify_dict_reverse.get(x))
@@ -730,32 +738,32 @@ def reformat_klp_list_dict_df(klp_list_dict, klp_list_dict_df, smnn_list_df):
             return form_standard_unify_dict_reverse_02.get(x)
         else:
             return form_standard_unify_dict_reverse.get(x)
-    logging.info("Extend 'form_standard_unify': update Sets...")
+    logger.info("Extend 'form_standard_unify': update Sets...")
     klp_list_dict_df['form_standard_unify'] = klp_list_dict_df['form_standard'].\
         progress_apply(lambda x: update_pharm_form_unify_02(x) )
-    logging.info("Extend 'form_standard_unify': done!")
+    logger.info("Extend 'form_standard_unify': done!")
     gc.collect(); gc.collect()
 
     # form_standard_unify_dict.values
 
-    logging.info("Extend 'lim_price_reg_date_str'")
+    logger.info("Extend 'lim_price_reg_date_str'")
     # klp_list_dict_df['lim_price_reg_date_str'] = klp_list_dict_df['lim_price_reg_date'].\
     #     progress_apply(lambda x: ';'.join(x) if x is not None and type(x)==list else ('' if x is None else x)) 
     klp_list_dict_df['lim_price_reg_date_str'] = klp_list_dict_df['lim_price_reg_date'].\
         progress_apply(lambda x: ';'.join(x) if x is not None and type(x)==list else ('' if x is None else x))       
-    logging.info(f"lim_price_reg_date_str.shape: " +
+    logger.info(f"lim_price_reg_date_str.shape: " +
     f"{klp_list_dict_df[klp_list_dict_df['lim_price_reg_date_str'].notnull() & (klp_list_dict_df['lim_price_reg_date_str'].str.len()>2)].shape[0]}")
     gc.collect(); gc.collect()
 
-    logging.info("Extend 'lim_price_barcode_str'")
+    logger.info("Extend 'lim_price_barcode_str'")
     klp_list_dict_df['lim_price_barcode_str'] = klp_list_dict_df['lim_price_barcode'].\
         progress_apply(\
       lambda x: ';'.join(x) if x is not None and type(x)==list else ('' if x is None else x))
-    logging.info(f"lim_price_barcode_str.shape: " + 
+    logger.info(f"lim_price_barcode_str.shape: " + 
     f"{klp_list_dict_df[klp_list_dict_df['lim_price_barcode_str'].notnull() & (klp_list_dict_df['lim_price_barcode_str'].str.len()>2)].shape[0]}")
     gc.collect(); gc.collect()
 
-    logging.info("Extend klp: + 'dosage_name_standard_list' , 'dosage_standard_value' - start...")
+    logger.info("Extend klp: + 'dosage_name_standard_list' , 'dosage_standard_value' - start...")
     smnn_cols = ['dosage_name_standard_list' , 'dosage_standard_value']
     new_cols = ['dosage_standard_value_str_list_klp' , 'dosage_standard_value_str_klp']
     # klp_list_dict_df.loc[:3, new_cols] = klp_list_dict_df.loc[:3,'code_smnn'].progress_apply(lambda x: pd.Series(smnn_list_df[smnn_list_df['code_smnn']==x][smnn_cols].values[0], index=new_cols))
@@ -788,8 +796,8 @@ def reformat_klp_list_dict_df(klp_list_dict, klp_list_dict_df, smnn_list_df):
     klp_list_dict_df.rename(columns = {'dosage_name_standard_list' : 'dosage_standard_value_str_list_klp', 
                                    'dosage_standard_value': 'dosage_standard_value_str_klp'}, inplace=True)
 
-    logging.info("Extend klp: + 'dosage_name_standard_list' , 'dosage_standard_value' - end")
-    logging.info("Reformat klp - done!:"  + str(klp_list_dict_df.shape))
+    logger.info("Extend klp: + 'dosage_name_standard_list' , 'dosage_standard_value' - end")
+    logger.info("Reformat klp - done!:"  + str(klp_list_dict_df.shape))
 
     return klp_list_dict_df
 

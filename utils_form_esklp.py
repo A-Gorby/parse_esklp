@@ -37,8 +37,9 @@ def def_form_esklp_upd_unify_pharm_forms(pharm_forms_to_add, unify_pharm_forms):
     # check_box = Box([Label(value="Выберите xml.zip-файл со справочником ЕСКЛП:"), fn_esklp_xml_zip_file_drop_douwn], layout=form_item_layout) 
     # check_box = Box([Label(value=pharm_forms_to_add[0]), unify_pharm_forms_drop_douwn], layout=form_item_layout)
     
-    pre_value = [widgets.Dropdown( options=unify_pharm_forms, value=pharm_form.split()[0].capitalize() if pharm_form.split()[0].capitalize() in unify_pharm_forms else None) 
-        for pharm_form in pharm_forms_to_add] 
+    pre_value = [widgets.Dropdown( options=unify_pharm_forms, value=pharm_form.split()[0].capitalize() 
+              if (pharm_form.split()[0].capitalize() in unify_pharm_forms) and not (pharm_form.split()[0].capitalize()=='Набор') else None) 
+                  for pharm_form in pharm_forms_to_add] 
     form_items = [Box([Label(value=pharm_form), pre_value[i_p]], layout=form_item_layout) for i_p, pharm_form in enumerate(pharm_forms_to_add)] 
     
     form_esklp_upd_unify_pharm_forms = Box(form_items, layout=Layout(display='flex', flex_flow= 'column', border='solid 2px', align_items='stretch', width='50%')) #width='auto'))

@@ -1,11 +1,12 @@
 # torch
 # numpy
-pandas == 1.4.1
-xlrd == 2.0.1
+pandas #== 1.4.1
+#xlrd == 2.0.1
 pyxlsb
 xml_to_dict
 xmlschema
 bs4
+mega.py
 #scipy
 #tqdm
 #openpyxl

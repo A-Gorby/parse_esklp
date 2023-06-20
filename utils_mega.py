@@ -28,9 +28,9 @@ def save_esklp_dictionaries_to_mega(m, esklp_date, fn_smnn_list_df, fn_klp_list_
     if esklp_date is None or (esklp_date is not None and (len(esklp_date)==0)):
         logger.error(f"Не определена переменная esklp_date")
         sys.exit(2)
-    if 'fn_smnn_list_df' not in globals() or 'fn_klp_list_dict_df' not in globals():
-        logger.error(f"Не определены переменные: 'fn_smnn_list_df' или 'fn_klp_list_dict_df'")
-        sys.exit(2)
+    # if 'fn_smnn_list_df' not in globals() or 'fn_klp_list_dict_df' not in globals():
+    #    logger.error(f"Не определены переменные: 'fn_smnn_list_df' или 'fn_klp_list_dict_df'")
+    #    sys.exit(2)
     smnn_fn_tar_gz, klp_fn_tar_gz = tar_esklp_dictionaries(
         esklp_date, fn_smnn_list_df, fn_klp_list_dict_df, data_esklp_processed_dir, data_tmp_dir)
     

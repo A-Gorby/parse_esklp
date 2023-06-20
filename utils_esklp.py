@@ -5,6 +5,7 @@ import logging
 import zipfile
 import datetime
 import pandas as pd
+import re
 
 from utils_io import logger
 if len(logger.handlers) > 1:
@@ -81,3 +82,18 @@ def save_df_to_pickle(df, path_to_save, fn_main):
     df.to_pickle(os.path.join(path_to_save, fn))
     logger.info(fn + ' saved to ' + path_to_save)
     return fn
+
+#smnn_prefix_active = 'smnn_list_df_esklp_active'
+#smnn_prefix_full = 'smnn_list_df_esklp_full'
+#klp_prefix_active = 'klp_list_dict_df_esklp_active'
+#klp_prefix_full = 'klp_list_dict_df_esklp_full'
+
+def extract_esklp_date(fn, prefix):
+    if fn is None: return None
+    # m = re.search(r"(?<=esklp_)\d+", fn)
+    m = re.search(fr"(?<={prefix}_)\d+", fn)
+    if m is not None:
+        esklp_date = m.group()
+        # print(f"esklp_date: {esklp_date}")
+    else: esklp_date = None
+    return esklp_date    
